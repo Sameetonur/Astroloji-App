@@ -36,15 +36,13 @@
             var fileName = file.Name + "-" + Guid.NewGuid().ToString().Split("-")[0] + Path.GetExtension(file.FileName);
 
             // Klasör yolu oluşturma
-            var uploadsFolder = Path.Combine("UI", "assets", "img");
-            var yearFolder = Path.Combine(uploadsFolder, DateTime.Now.Year.ToString());
-            var monthFolder = Path.Combine(yearFolder, DateTime.Now.Month.ToString("00"));
+            var uploadsFolder = Path.Combine("wwwroot", "UI", "assets", "img");
 
             // Klasörleri oluşturma
-            Directory.CreateDirectory(monthFolder);
+            Directory.CreateDirectory(uploadsFolder);
 
             // Tam dosya yolu
-            var filePath = Path.Combine(monthFolder, fileName);
+            var filePath = Path.Combine(uploadsFolder, fileName);
 
             try
             {
@@ -54,11 +52,46 @@
                 }
 
                 // Web'den erişilebilir yolu döndürme
-                return $"/assets/img/{DateTime.Now.Year}/{DateTime.Now.Month:00}/{fileName}";
+                return $"Ui/assets/img/{fileName}";
             }
             catch (Exception ex)
             {
                 throw new Exception($"Dosya yükleme hatası: {ex.Message}");
+            }
+        }
+
+        public static bool DeleteImage(string filePath)
+        {
+            try
+            {
+                var fullPath = Path.Combine("wwwroot", filePath);
+
+                if (File.Exists(fullPath))
+                {
+                    File.Delete(fullPath);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Dosya silme hatası: {ex.Message}");
+            }
+        }
+
+        public static async Task<string> UpdateImage(IFormFile newFile, string oldFilePath)
+        {
+            try
+            {
+                
+                DeleteImage(oldFilePath);
+
+                
+                return await ImgUpload(newFile);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Dosya güncelleme hatası: {ex.Message}");
             }
         }
     }
