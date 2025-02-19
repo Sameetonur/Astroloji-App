@@ -29,8 +29,15 @@ namespace AstrolojiApp.Areas.Admin.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var service = await _serviceService.GetByIdAsync(id);
+            
+            var updateDto = new ServiceUpdateDto
+            {
+                Id = service.Id,
+                Name = service.Name,
+                Title = service.Title
+            };
 
-            return View(service);
+            return View(updateDto);
         }
 
         [HttpPost]
@@ -47,9 +54,9 @@ namespace AstrolojiApp.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Add()
+        public IActionResult Add()
         {
-            return View();
+            return View(new ServiceCreateDto());
         }
 
         [HttpPost]

@@ -4,55 +4,69 @@ using AstrolojiApp.Business.Abstract;
 using AstrolojiApp.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace AstrolojiApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class HoroscopeCommentController : Controller
     {
-        private readonly IHoroscopeCommentService _horoscopeCommnetService;
+        private readonly IHoroscopeCommentService _horoscopeCommentService;
 
-        public HoroscopeCommentController(IHoroscopeCommentService horoscopeCommnetService)
+        public HoroscopeCommentController(IHoroscopeCommentService horoscopeCommentService)
         {
-            _horoscopeCommnetService = horoscopeCommnetService;
+            _horoscopeCommentService = horoscopeCommentService;
         }
 
-
-        // GET: HoroscopeCommentController
         public async Task<ActionResult> Index()
         {
-            var HoroscopeComments = await _horoscopeCommnetService.GetHoroscopeCommentAsync();
-            return View(HoroscopeComments);
+            var horoscopeComments = await _horoscopeCommentService.GetHoroscopeCommentAsync();
+            return View(horoscopeComments);
         }
 
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            var horoscopeComment = await _horoscopeCommnetService.GetByIdAsync(id);
+            var horoscopeComment = await _horoscopeCommentService.GetByIdAsync(id);
+            if (horoscopeComment == null)
+            {
+                return NotFound();
+            }
 
-            return View(horoscopeComment);
+            var updateDto = new HoroscopeCommentUpdateDto
+            {
+                Id = horoscopeComment.Id,
+                HoroscopeId = horoscopeComment.HoroscopeId,
+                Name = horoscopeComment.Name,
+                Daily = horoscopeComment.Daily,
+                Monthly = horoscopeComment.Monthly,
+                Annual = horoscopeComment.Annual
+            };
+
+            return View(updateDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(HoroscopeCommentUpdateDto  horoscopeCommentUpdateDto)
+        public async Task<IActionResult> Update(HoroscopeCommentUpdateDto horoscopeCommentUpdateDto)
         {
             if (ModelState.IsValid)
             {
-                var horoscopeComment = await _horoscopeCommnetService.UpdateAsync(horoscopeCommentUpdateDto);
-
-                return RedirectToAction("Index", "HoroscopeComment");
+                try
+                {
+                    await _horoscopeCommentService.UpdateAsync(horoscopeCommentUpdateDto);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Güncelleme sırasında bir hata oluştu.");
+                }
             }
-              return View(horoscopeCommentUpdateDto);
-            
+            return View(horoscopeCommentUpdateDto);
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-             await _horoscopeCommnetService.DeleteAsync(id);
-
-            return RedirectToAction("Index", "HoroscopeComment");
+            await _horoscopeCommentService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
-
     }
 }

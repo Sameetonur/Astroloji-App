@@ -1,23 +1,34 @@
 @model IEnumerable<DailyNewDto>
-@{
-    ViewData["Title"] = "Index";
-}
-<h1>Daily New</h1>
-<a href="/Admin/DailyNew/Add"> yeni ekle</a>
 
-@foreach (var daily in Model)
-{
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">@daily.Title</h5>
-            <p>
-                @daily.Text
-            </p>
-            <div class="">
-    
-                <a asp-action="Update" asp-route-id="@daily.Id" class="btn btn-primary btn-sm">Düzenle</a>
-                <a asp-action="Delete" asp-route-id="@daily.Id" class="btn btn-danger btn-sm">Sil</a>
-            </div>
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Günlük Haberler</h6>
+            <a asp-area="Admin" asp-controller="DailyNew" asp-action="Add" class="btn btn-primary">Yeni Ekle</a>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Title</h5>
+                            <p class="card-text">@item.Text</p>
+                            <div class="d-flex justify-content-between mt-3">
+                                <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Düzenle</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Sil</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
-}
+</div>
+
+<style>
+    .card {
+        box-shadow: 0 0.15rem 1.75rem 0 rgb(34 39 46 / 15%);
+    }
+</style>

@@ -17,7 +17,7 @@ namespace AstrolojiApp.Areas.Admin.Controllers
             _socialMediaService = socialMediaService;
         }
 
-        // GET: SocialController
+       
         public async Task<ActionResult> Index()
       {
 
@@ -29,7 +29,16 @@ namespace AstrolojiApp.Areas.Admin.Controllers
       public async Task<IActionResult> Update(int id)
       {
          var social = await _socialMediaService.GetByIdAsync(id);
-         return View(social);
+         
+         var updateDto = new SocialMediaUpdateDto
+         {
+             Id = social.Id,
+             Name = social.Name,
+             Url = social.Url,
+             Icon = social.Icon
+         };
+
+         return View(updateDto);
       }
 
 

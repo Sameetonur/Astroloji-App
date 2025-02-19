@@ -29,8 +29,16 @@ namespace AstrolojiApp.Areas.Admin.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var horoscopeGroup = await _horoscopeGroupService.GetByIdAsync(id);
+            
+            var updateDto = new HoroscopeGroupUpdateDto
+            {
+                Id = horoscopeGroup.Id,
+                Name = horoscopeGroup.Name,
+                Image = horoscopeGroup.Image,
+                HoroscopeNames = horoscopeGroup.HoroscopeNames
+            };
 
-            return View(horoscopeGroup);
+            return View(updateDto);
         }
 
         [HttpPost]

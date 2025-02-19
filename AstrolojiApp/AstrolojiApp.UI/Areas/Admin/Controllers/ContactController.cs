@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
 using AstrolojiApp.Business.Abstract;
@@ -27,8 +26,17 @@ namespace AstrolojiApp.Areas.Admin.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var contact = await _contactService.GetByIdAsync(id);
+            
+            var updateDto = new ContactUpdateDto
+            {
+                Id = contact.Id,
+                Address = contact.Address,
+                PhoneNumber = contact.PhoneNumber,
+                Icon = contact.Icon,
+                Map = contact.Map
+            };
 
-            return View(contact);
+            return View(updateDto);
         }
 
         [HttpPost]
@@ -44,9 +52,9 @@ namespace AstrolojiApp.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Add()
+        public IActionResult Add()
         {
-            return View();
+            return View(new ContactCreateDto());
         }
 
         [HttpPost]

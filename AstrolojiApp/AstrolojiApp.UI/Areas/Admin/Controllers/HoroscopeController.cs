@@ -18,9 +18,8 @@ namespace AstrolojiApp.Areas.Admin.Controllers
         // GET: HoroscopeController
         public async Task<ActionResult> Index()
         {
-        
-            var horoscopes=await _horoscopeService.GetHoroscopeAsync();
-            return View(horoscopes);
+            var horoscopes = await _horoscopeService.GetHoroscopeAsync();
+            return View(horoscopes.ToList());
         }
 
         [HttpGet]
@@ -28,7 +27,15 @@ namespace AstrolojiApp.Areas.Admin.Controllers
         {
             var horoscope = await _horoscopeService.GetByIdAsync(id);
 
-            return View(horoscope);
+            var updateDto = new HoroscopeUpdateDto
+            {
+                Id = horoscope.Id,
+                Name = horoscope.Name,
+                Image = horoscope.Image,
+                DateRange = horoscope.DateRange
+            };
+
+            return View(updateDto);
         }
 
         [HttpPost]
