@@ -56,7 +56,7 @@ namespace AstrolojiApp.Areas.Admin.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError(ex.Message, "Güncelleme sırasında bir hata oluştu.");
+                    ModelState.AddModelError("", "Güncelleme sırasında bir hata oluştu.");
                 }
             }
             return View(horoscopeCommentUpdateDto);
