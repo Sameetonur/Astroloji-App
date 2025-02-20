@@ -24,11 +24,12 @@ namespace AstrolojiApp.Areas.Admin.Controllers
             var dailyNews = await _dailyNewService.GetDailyNewAsync();
             return View(dailyNews);
         }
+
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
             var dailyNew = await _dailyNewService.GetByIdAsync(id);
-            
+
             var updateDto = new DailyNewUpdateDto
             {
                 Id = dailyNew.Id,
