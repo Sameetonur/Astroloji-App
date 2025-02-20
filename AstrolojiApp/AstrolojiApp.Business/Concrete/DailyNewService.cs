@@ -85,7 +85,9 @@ public class DailyNewService : IDailyNewService
             Text = dailyNewUpdateDto.Text,
             Title = dailyNewUpdateDto.Title
         };
+
         await _dailyNewRepository.GetAsync(dailynew.Id);
+
         if (dailynew.Id == null)
         {
             return null;
